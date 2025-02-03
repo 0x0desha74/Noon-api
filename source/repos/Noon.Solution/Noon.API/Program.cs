@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Noon.API.Heplers;
 using Noon.Core.Repositories;
 using Noon.Repository;
 using Noon.Repository.Data;
@@ -23,6 +24,7 @@ namespace Noon.API
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(); 
             builder.Services.AddScoped(typeof(IGenericRepository<>),typeof(GenericRepository<>));
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
             #endregion
 
 
@@ -56,7 +58,7 @@ namespace Noon.API
 
             app.UseHttpsRedirection();
 
-
+            app.UseStaticFiles();
             app.MapControllers();
 
             app.Run(); 

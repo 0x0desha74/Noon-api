@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Noon.Core.Entities;
 using Noon.Core.Repositories;
+using Noon.Core.Specifications;
 using Noon.Repository.Data;
 using System;
 using System.Collections.Generic;
@@ -18,24 +19,24 @@ namespace Noon.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<IEnumerable<T>> GetAllAsync()
-        {
-            if (typeof(T) == typeof(Product))
-            {
 
-                return (IEnumerable<T>)await _dbContext.Products
-                                              .Include(P => P.Brand)
-                                              .Include(P => P.Type)
-                                              .ToListAsync();
-            }
-            return await _dbContext.Set<T>().ToListAsync();
+
+        public async Task<IEnumerable<T>> GetAllWithSpec(ISpecifications<T> spec)
+        {
+            return await ApplySpecification(spec).ToListAsync();
         }
 
+        
 
-
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdWithSpec(ISpecifications<T> spec)
         {
-            return await _dbContext.Set<T>().FindAsync(id);
+            return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
+        private IQueryable<T> ApplySpecification(ISpecifications<T> spec)
+        {
+            return SpecificationEvaluator<T>.BuildQuery(_dbContext.Set<T>(), spec);
+        }
+
+      
     }
 }
