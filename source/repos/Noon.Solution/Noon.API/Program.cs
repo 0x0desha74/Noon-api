@@ -82,7 +82,7 @@ namespace Noon.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseStatusCodePagesWithReExecute("/errors/{0}"); //Handling NotFound EndPoint
             app.UseHttpsRedirection();
 
             app.UseStaticFiles();
