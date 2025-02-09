@@ -12,17 +12,31 @@ namespace Noon.Core.Specifications
     {
         public Expression<Func<T, bool>>? Criteria { get; set; }
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
+        public Expression<Func<T, object>> OrderBy { get; set; }
+        public Expression<Func<T, object>> OrderByDescending { get; set; }
 
-
-        public BaseSpecification() //for no filtering => no criteria
+        public BaseSpecification(string? sort, int? brandId, int? typeId) //for no filtering => no criteria
         {
 
         }
 
 
-        public BaseSpecification(Expression<Func<T, bool>>? criteria ) //with filtering => with criteria
+        public BaseSpecification(Expression<Func<T, bool>>? criteria) //with filtering => with criteria
         {
             Criteria = criteria;
+        }
+
+
+
+
+        public void AddOrderAscBy(Expression<Func<T,object>> orderByExpression)
+        {
+            OrderBy = orderByExpression;
+        }
+
+        public void AddOrderDescBy(Expression<Func<T, object>> orderByDescExpression)
+        {
+            OrderByDescending = orderByDescExpression;
         }
     }
 }

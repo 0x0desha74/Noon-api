@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Noon.API.Errors;
+using Noon.API.Extensions;
 using Noon.API.Heplers;
 using Noon.API.Middlewares;
 using Noon.Core.Repositories;
@@ -15,7 +16,6 @@ namespace Noon.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            #region Configure Services
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("no connection string wes found");
             // Add services to the container.
             builder.Services.AddDbContext<StoreContext>(options =>
@@ -23,35 +23,10 @@ namespace Noon.API
                 options.UseSqlServer(connectionString);
             });
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
-            #endregion
 
-            builder.Services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.InvalidModelStateResponseFactory = (actionContext) =>
-                {
-
-                    var errors = actionContext.ModelState.Where(P => P.Value.Errors.Count() > 0)
-                                                         .SelectMany(P => P.Value.Errors)
-                                                         .Select(E => E.ErrorMessage)
-                                                         .ToArray();
-
-
-                    var validationErrorResponse = new ApiValidationErrorResponse()
-                    {
-                        Errors = errors
-                    };
-                    return new BadRequestObjectResult(validationErrorResponse);
-                };
-            });
-
-
+            builder.Services.AddSwaggerServices();
+            builder.Services.AddApplicationServices();
             var app = builder.Build();
-
 
 
 
@@ -74,22 +49,19 @@ namespace Noon.API
 
 
 
-            #region Configure Kestrel Middelwares
             app.UseMiddleware<ExceptionMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                app.UseSwaggerMiddlewares();
             }
+
             app.UseStatusCodePagesWithReExecute("/errors/{0}"); //Handling NotFound EndPoint
             app.UseHttpsRedirection();
-
             app.UseStaticFiles();
             app.MapControllers();
 
             app.Run();
-            #endregion
         }
     }
 }

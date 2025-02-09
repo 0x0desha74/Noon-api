@@ -20,13 +20,21 @@ namespace Noon.Repository
             _dbContext = dbContext;
         }
 
+        public async Task<IReadOnlyList<T>> GetAll()
+        {
+            return await _dbContext.Set<T>().ToListAsync();
+        }
 
-        public async Task<IEnumerable<T>> GetAllWithSpec(ISpecifications<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllWithSpec(ISpecifications<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }
 
-        
+        public async Task<T> GetById(int id)
+        {
+            return await _dbContext.Set<T>().FindAsync(id);
+            
+        }
 
         public async Task<T> GetByIdWithSpec(ISpecifications<T> spec)
         {
