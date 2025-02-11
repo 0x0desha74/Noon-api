@@ -3,7 +3,7 @@ using Microsoft.Extensions.Options;
 using Noon.API.DTOs;
 using Noon.Core.Entities;
 
-namespace Noon.API.Heplers
+namespace Noon.API.Helpers
 {
     public class ProductPictureResolver : IValueResolver<Product, ProductToReturnDto, string>
     {

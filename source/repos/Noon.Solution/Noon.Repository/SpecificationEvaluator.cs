@@ -19,6 +19,14 @@ namespace Noon.Repository
                 query = query.Where(spec.Criteria);
             
 
+
+            if(spec.IsPaginationEnabled)
+            {
+                query.Skip(spec.Skip);
+                query.Take(spec.Take);
+            }
+
+
             if(spec.OrderBy is not null)
                 query = query.OrderBy(spec.OrderBy);
 

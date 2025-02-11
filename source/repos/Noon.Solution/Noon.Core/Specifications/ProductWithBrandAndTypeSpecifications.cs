@@ -15,16 +15,25 @@ namespace Noon.Core.Specifications
             Includes.Add(P => P.Type);
             Includes.Add(P => P.Brand);
         }
-     
 
-        public ProductWithBrandAndTypeSpecifications(string? sort,int? brandId, int? typeId) : base(
-             P => (!brandId.HasValue || P.Brand.Id == brandId) &&
-                  (!typeId.HasValue || P.Type.Id == typeId)
+
+        public ProductWithBrandAndTypeSpecifications(ProductSpecParams ProductSpecParams)
+            : base(P =>
+
+                    (string.IsNullOrEmpty(ProductSpecParams.Search) || P.Name.ToLower().Contains(ProductSpecParams.Search)) &&
+                    (!ProductSpecParams.BrandId.HasValue || P.Brand.Id == ProductSpecParams.BrandId) &&
+                    (!ProductSpecParams.BrandId.HasValue || P.Type.Id == ProductSpecParams.BrandId)
             )
         {
-            if (!string.IsNullOrEmpty(sort))
+
+
+
+
+            ApplyPagination((ProductSpecParams.PageIndex -1) * ProductSpecParams.PageSize ,ProductSpecParams.PageSize);
+
+            if (!string.IsNullOrEmpty(ProductSpecParams.Sort))
             {
-                switch (sort)
+                switch (ProductSpecParams.Sort)
                 {
                     case "priceAsc":
                         AddOrderAscBy(P => P.Price);

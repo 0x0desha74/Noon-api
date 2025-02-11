@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Noon.API.Errors;
-using Noon.API.Heplers;
+using Noon.API.Helpers;
 using Noon.Core.Repositories;
 using Noon.Repository;
 

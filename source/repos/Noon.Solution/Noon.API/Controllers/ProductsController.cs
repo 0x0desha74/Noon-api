@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noon.API.DTOs;
 using Noon.API.Errors;
+using Noon.API.Helpers;
 using Noon.Core.Entities;
 using Noon.Core.Repositories;
 using Noon.Core.Specifications;
@@ -27,27 +28,34 @@ namespace Noon.API.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyList<Product>>> GetProducts(string? sort,int? brandId, int? typeId)
+        public async Task<ActionResult<IReadOnlyList<Pagination<ProductToReturnDto>>>> GetProducts([FromQuery] ProductSpecParams specParams)
         {
-            var spec = new ProductWithBrandAndTypeSpecifications(sort, brandId, typeId);
+            var spec = new ProductWithBrandAndTypeSpecifications(specParams);
 
             var products = await _productRepo.GetAllWithSpec(spec);
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDto>>(products));
+            var countSpec = new ProductWithFilterationForCountSpecification(specParams);
+            var Count = await _productRepo.GetCountWithSpecAsync(countSpec);
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDto>>(products);
+            
+            return Ok(new Pagination<ProductToReturnDto>(specParams.PageSize, specParams.PageIndex, Count, data));
+        
+        
         }
+
 
 
 
         [HttpGet("{id}")]
         [ProducesResponseType(typeof(ProductToReturnDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<Product>> GetProduct(int id)
+        public async Task<ActionResult<ProductToReturnDto>> GetProduct(int id)
         {
 
             var spec = new ProductWithBrandAndTypeSpecifications(id);
             var product = await _productRepo.GetByIdWithSpec(spec);
 
 
-            if (product is null) return Ok();
+            if (product is null) return Ok(new ApiResponse(404));
 
             return Ok(_mapper.Map<Product, ProductToReturnDto>(product));
         }

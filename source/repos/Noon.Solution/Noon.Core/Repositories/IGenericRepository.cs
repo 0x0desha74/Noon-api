@@ -13,7 +13,8 @@ namespace Noon.Core.Repositories
         Task<IReadOnlyList<T>> GetAll();
         Task<T> GetById(int id);
         Task<IReadOnlyList<T>> GetAllWithSpec(ISpecifications<T> specifications);
-         Task<T>GetByIdWithSpec(ISpecifications<T> specifications);
+        Task<T> GetByIdWithSpec(ISpecifications<T> specifications);
+        Task<int> GetCountWithSpecAsync(ISpecifications<T> specifications);
     }
 
 }

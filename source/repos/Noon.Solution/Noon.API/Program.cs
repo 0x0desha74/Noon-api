@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Noon.API.Errors;
 using Noon.API.Extensions;
-using Noon.API.Heplers;
+using Noon.API.Helpers;
 using Noon.API.Middlewares;
 using Noon.Core.Repositories;
 using Noon.Repository;

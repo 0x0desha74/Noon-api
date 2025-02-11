@@ -20,6 +20,7 @@ namespace Noon.Repository
             _dbContext = dbContext;
         }
 
+       
         public async Task<IReadOnlyList<T>> GetAll()
         {
             return await _dbContext.Set<T>().ToListAsync();
@@ -40,6 +41,18 @@ namespace Noon.Repository
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }
+
+
+
+        public async Task<int> GetCountWithSpecAsync(ISpecifications<T> specifications)
+        {
+            return await ApplySpecification(specifications).CountAsync();
+        }
+
+
+
+
+
         private IQueryable<T> ApplySpecification(ISpecifications<T> spec)
         {
             return SpecificationEvaluator<T>.BuildQuery(_dbContext.Set<T>(), spec);

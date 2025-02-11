@@ -14,6 +14,9 @@ namespace Noon.Core.Specifications
         public List<Expression<Func<T, object>>> Includes { get; set; } = new List<Expression<Func<T, object>>>();
         public Expression<Func<T, object>> OrderBy { get; set; }
         public Expression<Func<T, object>> OrderByDescending { get; set; }
+        public int Take { get; set; }
+        public int Skip { get; set; }
+        public bool IsPaginationEnabled { get; set; }
 
         public BaseSpecification(string? sort, int? brandId, int? typeId) //for no filtering => no criteria
         {
@@ -38,5 +41,13 @@ namespace Noon.Core.Specifications
         {
             OrderByDescending = orderByDescExpression;
         }
+
+        public void ApplyPagination(int take, int skip)
+        {
+            IsPaginationEnabled = true;
+            Skip = skip;
+            Take = take;
+        }
+      
     }
 }
