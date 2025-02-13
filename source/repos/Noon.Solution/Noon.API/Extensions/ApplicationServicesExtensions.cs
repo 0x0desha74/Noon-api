@@ -3,6 +3,7 @@ using Noon.API.Errors;
 using Noon.API.Helpers;
 using Noon.Core.Repositories;
 using Noon.Repository;
+using Noon.Repository.Identity;
 
 namespace Noon.API.Extensions
 {
@@ -15,6 +16,9 @@ namespace Noon.API.Extensions
         
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
+
+       
 
 
             services.Configure<ApiBehaviorOptions>(options =>

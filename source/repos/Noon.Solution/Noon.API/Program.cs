@@ -1,12 +1,16 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Noon.API.Errors;
 using Noon.API.Extensions;
 using Noon.API.Helpers;
 using Noon.API.Middlewares;
+using Noon.Core.Entities.Identity;
 using Noon.Core.Repositories;
 using Noon.Repository;
 using Noon.Repository.Data;
+using Noon.Repository.Identity;
+using StackExchange.Redis;
 
 namespace Noon.API
 {
@@ -16,16 +20,37 @@ namespace Noon.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("no connection string wes found");
             // Add services to the container.
+            builder.Services.AddControllers();
+             
+            //Allow Dependency Injection Of ApplicationDbContext
             builder.Services.AddDbContext<StoreContext>(options =>
             {
+                var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("no connection string wes found");
                 options.UseSqlServer(connectionString);
             });
-            builder.Services.AddControllers();
 
-            builder.Services.AddSwaggerServices();
+
+            //Allow Dependency Injection Of Redis
+            builder.Services.AddSingleton<IConnectionMultiplexer>(S =>
+            {
+                var cs = builder.Configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(cs);
+            });
+
+
+            //Allow Dependency Injection Of AppIdentityDbContext
+            builder.Services.AddDbContext<AppIdentityDbContext>(options =>
+            {
+                var identityConnectionString = builder.Configuration.GetConnectionString("IdentityConnection") ?? throw new InvalidOperationException("No Connection String Was Found");
+                options.UseSqlServer(identityConnectionString);
+            });
+
+
+            //Application Services
             builder.Services.AddApplicationServices();
+            builder.Services.AddIdentityServices();
+            builder.Services.AddSwaggerServices();
             var app = builder.Build();
 
 
@@ -39,6 +64,14 @@ namespace Noon.API
                 var dbContext = services.GetRequiredService<StoreContext>(); //Creating object form dbContext explicitly
                 await dbContext.Database.MigrateAsync(); //Apply Migrations
                 await StoreContextSeed.SeedDataAsync(dbContext); //Seeding Data
+
+                var identityDbContext = services.GetRequiredService<AppIdentityDbContext>();
+                await identityDbContext.Database.MigrateAsync();
+
+                //Seeding data of the first user
+                var userManager = services.GetRequiredService<UserManager<AppUser>>();
+                await AppIdentityDbContextSeed.SeedUserAsync(userManager);
+
             }
             catch (Exception ex)
             {
@@ -49,6 +82,7 @@ namespace Noon.API
 
 
 
+            #region Configur Kestrel Middlewares
             app.UseMiddleware<ExceptionMiddleware>();
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -58,6 +92,8 @@ namespace Noon.API
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}"); //Handling NotFound EndPoint
             app.UseHttpsRedirection();
+            #endregion
+
             app.UseStaticFiles();
             app.MapControllers();
 
