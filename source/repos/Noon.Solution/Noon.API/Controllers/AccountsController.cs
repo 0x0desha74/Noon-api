@@ -22,7 +22,6 @@ namespace Noon.API.Controllers
 
 
         [HttpPost("login")] //POST :  api/accounts/login
-
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
             var user = await _userManager.FindByEmailAsync(loginDto.Email);
@@ -38,8 +37,9 @@ namespace Noon.API.Controllers
 
         }
 
-        [HttpPost("register")] //POST : api/accounts/register
 
+
+        [HttpPost("register")] //POST : api/accounts/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
             var user = new AppUser()
