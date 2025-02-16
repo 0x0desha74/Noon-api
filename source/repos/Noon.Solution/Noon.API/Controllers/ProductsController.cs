@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Noon.API.DTOs;
@@ -26,7 +27,7 @@ namespace Noon.API.Controllers
             _typesRepo = typesRepo;
         }
 
-
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Pagination<ProductToReturnDto>>>> GetProducts([FromQuery] ProductSpecParams specParams)
         {

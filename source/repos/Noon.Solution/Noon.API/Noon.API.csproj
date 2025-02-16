@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Noon.Repository\Noon.Repository.csproj" />
+    <ProjectReference Include="..\Noon.Service\Noon.Service.csproj" />
   </ItemGroup>
 
 </Project>

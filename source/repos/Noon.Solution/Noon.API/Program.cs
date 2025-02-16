@@ -49,7 +49,7 @@ namespace Noon.API
 
             //Application Services
             builder.Services.AddApplicationServices();
-            builder.Services.AddIdentityServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddSwaggerServices();
             var app = builder.Build();
 
@@ -92,6 +92,9 @@ namespace Noon.API
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}"); //Handling NotFound EndPoint
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
+            app.UseAuthorization();
             #endregion
 
             app.UseStaticFiles();

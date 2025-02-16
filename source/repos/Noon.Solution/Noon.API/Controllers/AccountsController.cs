@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Noon.API.DTOs;
 using Noon.API.Errors;
 using Noon.Core.Entities.Identity;
+using Noon.Core.Services;
 
 namespace Noon.API.Controllers
 {
@@ -13,11 +14,13 @@ namespace Noon.API.Controllers
 
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
+        private readonly ITokenService _tokenService;
 
-        public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager)
+        public AccountsController(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, ITokenService tokenService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
 
@@ -32,7 +35,7 @@ namespace Noon.API.Controllers
             {
                 DisplayName = user.DisplayName,
                 Email = user.Email,
-                Token = "This will be a Token"
+                Token = await _tokenService.CreateTokenAsync(user,_userManager)
             });
 
         }
@@ -55,7 +58,7 @@ namespace Noon.API.Controllers
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
-                Token = "This will be a Token"
+                Token = await _tokenService.CreateTokenAsync(user,_userManager)
             });
         }
 
