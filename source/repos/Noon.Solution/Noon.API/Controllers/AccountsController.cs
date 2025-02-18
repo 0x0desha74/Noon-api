@@ -52,6 +52,9 @@ namespace Noon.API.Controllers
         [HttpPost("register")] //POST : api/accounts/register
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
+            if (CheckEmailExists(registerDto.Email).Result.Value)
+                return BadRequest(new ApiValidationErrorResponse(){Errors =  new  string[] { "Email already exists" } });
+            
             var user = new AppUser()
             {
                 DisplayName = registerDto.DisplayName,
@@ -97,6 +100,40 @@ namespace Noon.API.Controllers
             return Ok(address);
 
         }
+
+        [Authorize]
+        [HttpPut("updateaddress")] // PUT : api/accounts/updateaddress
+        public async Task<ActionResult<AddressDto>> UpadteUserAddress(AddressDto updatedAddress)
+        {
+            var address = _mapper.Map<AddressDto, Address>(updatedAddress);
+
+            var user = await _userManager.FindUserAddressAsync(User);
+
+            address.Id = user.Address.Id;
+            user.Address = address;
+
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return  BadRequest(new ApiResponse(400));
+            return Ok(_mapper.Map<Address, AddressDto>(user.Address));
+
+
+
+        }
+
+
+
+
+
+
+
+        [HttpGet("emailexists")] // GET : api/accounts/emailexists?email=
+        public async Task<ActionResult<bool>> CheckEmailExists(string email)
+        {
+            return await _userManager.FindByEmailAsync(email) is not null;
+        }
+
+
+
 
 
 
