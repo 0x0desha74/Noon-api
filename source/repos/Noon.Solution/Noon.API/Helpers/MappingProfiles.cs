@@ -15,6 +15,8 @@ namespace Noon.API.Helpers
                 .ForMember(d => d.PictureUrl, O => O.MapFrom<ProductPictureResolver>());
 
             CreateMap<Address, AddressDto>().ReverseMap();
+            CreateMap<CustomerBasketDto, CustomerBasket>();
+            CreateMap<BasketItemDto, BasketItem>();
         }
 
     }

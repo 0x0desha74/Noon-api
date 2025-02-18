@@ -8,12 +8,14 @@ namespace Noon.Core.Entities
 {
     public class CustomerBasket
     {
-        public string BasketId{ get; set; }
+       
+        public string Id{ get; set; }
         public List<BasketItem> Items { get; set; } = new List<BasketItem>();
 
-        public CustomerBasket(string basketId)
+        public CustomerBasket(string id)
         {
-            BasketId = basketId;
+            Id = id;
         }
+     
     }
 }

@@ -36,9 +36,9 @@ namespace Noon.Repository
 
         public async Task<CustomerBasket?> UpdateBasketAsync(CustomerBasket basket)
         {
-            var UpdatedOrCreated = await _database.StringSetAsync(basket.BasketId, JsonSerializer.Serialize(basket), TimeSpan.FromDays(1));
+            var UpdatedOrCreated = await _database.StringSetAsync(basket.Id, JsonSerializer.Serialize(basket), TimeSpan.FromDays(1));
             if (UpdatedOrCreated is false) return null;
-            return await GetBasketAsync(basket.BasketId);
+            return await GetBasketAsync(basket.Id);
 
         }
     }
