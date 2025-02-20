@@ -8,6 +8,10 @@ namespace Noon.Core.Entities.Order_Aggregate
 {
    public class OrderItem : BaseEntity
     {
+        public OrderItem()
+        {
+
+        }
         public OrderItem(ProductItemOrdered product, int quantity, decimal price)
         {
             Product = product;

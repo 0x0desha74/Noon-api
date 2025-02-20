@@ -1,4 +1,5 @@
 ﻿using Noon.Core.Entities;
+using Noon.Core.Entities.Order_Aggregate;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,6 +52,17 @@ namespace Noon.Repository.Data
                 await dbContext.SaveChangesAsync();
             }
 
+            if (!dbContext.DeliveryMethods.Any())
+            {
+                var deliveryMethodsData = File.ReadAllText("../Noon.Repository/Data/DataSeed/delivery.json");
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(deliveryMethodsData);
+                if(deliveryMethods is not null && deliveryMethods.Count() > 0)
+                {
+                    foreach (var deliveryMethod in deliveryMethods)
+                        await dbContext.DeliveryMethods.AddAsync(deliveryMethod);
+                }
+                await dbContext.SaveChangesAsync();
+            }
         }
 
     }

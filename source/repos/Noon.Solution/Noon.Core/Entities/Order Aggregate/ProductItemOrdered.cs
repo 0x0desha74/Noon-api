@@ -2,6 +2,7 @@
 {
     public class ProductItemOrdered
     {
+            //ctor
         public ProductItemOrdered(int productId, string productName, string pictureUrl)
         {
             ProductId = productId;

@@ -8,6 +8,10 @@ namespace Noon.Core.Entities.Order_Aggregate
 {
    public class Address
     {
+        public Address()
+        {
+
+        }
         public Address(string firstName, string lastName, string street, string city, string country)
         {
             FirstName = firstName;
