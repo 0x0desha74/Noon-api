@@ -15,7 +15,7 @@ namespace Noon.Core.Repositories
         Task<IReadOnlyList<T>> GetAllWithSpec(ISpecifications<T> specifications);
         Task<T> GetByIdWithSpec(ISpecifications<T> specifications);
         Task<int> GetCountWithSpecAsync(ISpecifications<T> specifications);
-        Task<T> AddAsync(T entity);
+        Task AddAsync(T entity);
         void Update(T entity);
         void Delete(T entity);
 
