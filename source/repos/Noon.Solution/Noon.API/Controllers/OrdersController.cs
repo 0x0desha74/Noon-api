@@ -1,0 +1,41 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Noon.API.DTOs;
+using Noon.API.Errors;
+using Noon.Core;
+using Noon.Core.Entities.Order_Aggregate;
+using Noon.Core.Services;
+using System.Security.Claims;
+
+namespace Noon.API.Controllers
+{
+    [Authorize]
+    public class OrdersController : BaseApiController
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IOrderService _orderService;
+        private readonly IMapper _mapper;
+        public OrdersController(IUnitOfWork unitOfWork, IOrderService orderService, IMapper mapper)
+        {
+            _unitOfWork = unitOfWork;
+            _orderService = orderService;
+            _mapper = mapper;
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<ActionResult<OrderToReturnDto>> CreateOrder(OrderDro orderDto)
+        {
+            var buyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var mappedShippingAddress = _mapper.Map<AddressDto, Address>(orderDto.ShippingAddress);
+            var order = await _orderService.CreateOrderAsync(buyerEmail, orderDto.BasketId, mappedShippingAddress, orderDto.DeliveryMethodId);
+            if (order is null) return BadRequest(new ApiResponse(400));
+            return Ok(_mapper.Map<Order,OrderToReturnDto>(order));
+
+        }
+    }
+}

@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace Noon.Core.Entities.Order_Aggregate
 {
-   public class OrderItem : BaseEntity
+    public class OrderItem : BaseEntity
     {
         public OrderItem()
         {
 
         }
-        public OrderItem(ProductItemOrdered product, int quantity, decimal price)
+        public OrderItem(ProductItemOrdered product, decimal price, int quantity)
         {
             Product = product;
-            Quantity = quantity;
             Price = price;
+            Quantity = quantity;
         }
 
         public ProductItemOrdered Product { get; set; }
-        public int Quantity { get; set; }
         public decimal Price { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -3,8 +3,10 @@ using Noon.API.Errors;
 using Noon.API.Helpers;
 using Noon.Core;
 using Noon.Core.Repositories;
+using Noon.Core.Services;
 using Noon.Repository;
 using Noon.Repository.Identity;
+using Noon.Service;
 
 namespace Noon.API.Extensions
 {
@@ -15,11 +17,11 @@ namespace Noon.API.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
         
-            services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+            //services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-       
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
 
 
             services.Configure<ApiBehaviorOptions>(options =>

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Noon.Core.Entities.Order_Aggregate
 {
-   public enum OrderStatus
+    public enum OrderStatus
     {
-        [EnumMember(Value = "Pending")]
+        [EnumMember(Value ="Pending")]
         Pending,
-        [EnumMember(Value = "Payment Received")]
+        [EnumMember(Value ="Payment Received")]
         PaymentReceived,
         [EnumMember(Value = "Payment Failed")]
         PaymentFailed

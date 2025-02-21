@@ -1,4 +1,5 @@
-﻿using Noon.Core.Entities;
+﻿using Noon.Core;
+using Noon.Core.Entities;
 using Noon.Core.Entities.Order_Aggregate;
 using Noon.Core.Repositories;
 using Noon.Core.Services;
@@ -13,23 +14,16 @@ namespace Noon.Service
     public class OrderService : IOrderService
     {
         private readonly IBasketRepository _basketRepo;
-        private readonly IGenericRepository<Product> _productRepo;
-        private readonly IGenericRepository<DeliveryMethod> _deliveryMethodRepo;
-        private readonly IGenericRepository<Order> _orderRepo;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public OrderService(IBasketRepository basketRepo,
-            IGenericRepository<Product> productRepo,
-            IGenericRepository<DeliveryMethod> deliveryMethodRepo,
-            IGenericRepository<Order> orderRepo)
+        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork)
         {
             _basketRepo = basketRepo;
-            _productRepo = productRepo;
-            _deliveryMethodRepo = deliveryMethodRepo;
-            _orderRepo = orderRepo;
+            _unitOfWork = unitOfWork;
         }
 
-        public async Task<Order> CreateOrderAsync(string buyerEmail, string basketId, Address shippingAddress, int deliveryMethodId)
+        public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, Address shippingAddress, int deliveryMethodId)
         {
 
             var basket = await _basketRepo.GetBasketAsync(basketId);
@@ -37,17 +31,19 @@ namespace Noon.Service
             var items = new List<OrderItem>();
             foreach (var item in basket.Items)
             {
-                var product = await _productRepo.GetById(item.Id);
+                var product = await _unitOfWork.Repository<Product>().GetById(item.Id);
                 var productItemOrdered = new ProductItemOrdered(product.Id, product.Name, product.PictureUrl);
-                var orderItem = new OrderItem(productItemOrdered, item.Quantity, product.Price);
+                var orderItem = new OrderItem(productItemOrdered, product.Price, item.Quantity);
                 items.Add(orderItem);
 
             }
             var subtotal = items.Sum(product => (product.Price * product.Quantity));
-            var deliveryMethod = await _deliveryMethodRepo.GetById(deliveryMethodId);
-            var order = new Order(buyerEmail, shippingAddress, deliveryMethod, items, subtotal);
-            await _orderRepo.AddAsync(order);
-            return order;
+            var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetById(deliveryMethodId);
+            var order = new Order(buyerEmail, items, deliveryMethod, shippingAddress, subtotal);
+            await _unitOfWork.Repository<Order>().AddAsync(order);
+            var result = await _unitOfWork.Complete();
+
+            return result > 0 ? order : null;
 
         }
 
