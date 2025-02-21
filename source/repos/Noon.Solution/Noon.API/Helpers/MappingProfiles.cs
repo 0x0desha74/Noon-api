@@ -30,7 +30,7 @@ namespace Noon.API.Helpers
                 .ForMember(d => d.ProductName, O => O.MapFrom(s => s.Product.ProductName))
                 .ForMember(d => d.PictureUrl, O => O.MapFrom(s => s.Product.PictureUrl))
                 .ForMember(d => d.ProductId, O => O.MapFrom(s => s.Product.ProductId))
-                /*.ForMember(d=>d.ProductUrl, O=>O.MapFrom<>())*/;
+                .ForMember(d => d.PictureUrl, O => O.MapFrom<OrderItemPictureResolver>());
 
         }
 
