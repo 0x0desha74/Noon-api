@@ -50,7 +50,9 @@ namespace Noon.Service
 
         public Task<Order> GetOrderByIdForUserAsync(string buyerEmail, int orderId)
         {
-            throw new NotImplementedException();
+            var spec = new OrderSpecifications(buyerEmail, orderId);
+            var order = _unitOfWork.Repository<Order>().GetByIdWithSpec(spec);
+            return order is null? null : order ;
         }
 
         public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
@@ -59,5 +61,12 @@ namespace Noon.Service
             var orders = _unitOfWork.Repository<Order>().GetAllWithSpec(spec);
             return orders;
         }
+
+        public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
+        {
+
+               return _unitOfWork.Repository<DeliveryMethod>().GetAll();
+        }
+
     }
 }

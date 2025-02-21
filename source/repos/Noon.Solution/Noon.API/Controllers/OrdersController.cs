@@ -7,6 +7,7 @@ using Noon.API.Errors;
 using Noon.Core;
 using Noon.Core.Entities.Order_Aggregate;
 using Noon.Core.Services;
+using Noon.Service;
 using System.Security.Claims;
 
 namespace Noon.API.Controllers
@@ -24,9 +25,10 @@ namespace Noon.API.Controllers
             _mapper = mapper;
         }
 
-
-
-
+        
+        //Improve Swagger Documentation
+        [ProducesResponseType(typeof(OrderItemDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status400BadRequest)]
         [HttpPost]
         public async Task<ActionResult<OrderToReturnDto>> CreateOrder(OrderDro orderDto)
         {
@@ -38,7 +40,8 @@ namespace Noon.API.Controllers
         }
 
 
-
+        [ProducesResponseType(typeof(IReadOnlyList<Order>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser()
         {
@@ -46,6 +49,26 @@ namespace Noon.API.Controllers
             var orders = await _orderService.GetOrdersForUserAsync(buyerEmail);
             if (orders is null) return NotFound(new ApiResponse(404));
             return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(orders));
+        }
+
+
+        [ProducesResponseType(typeof(IReadOnlyList<Order>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ApiResponse), StatusCodes.Status404NotFound)]
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Order>> GetOrderForUser(int id)
+        {
+            var buyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var order = await _orderService.GetOrderByIdForUserAsync(buyerEmail, id);
+            if (order is null) return NotFound(new ApiResponse(404));
+            return Ok(_mapper.Map<Order,OrderToReturnDto>(order));
+        }
+
+
+        [HttpGet("deliveryMethods")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethods()
+        {
+            var deliveryMethods = await _orderService.GetDeliveryMethodsAsync();
+               return Ok(deliveryMethods);
         }
 
     }
