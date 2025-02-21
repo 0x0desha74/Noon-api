@@ -3,6 +3,7 @@ using Noon.Core.Entities;
 using Noon.Core.Entities.Order_Aggregate;
 using Noon.Core.Repositories;
 using Noon.Core.Services;
+using Noon.Core.Specifications;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -54,7 +55,9 @@ namespace Noon.Service
 
         public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
         {
-            throw new NotImplementedException();
+            var spec = new OrderSpecifications(buyerEmail);
+            var orders = _unitOfWork.Repository<Order>().GetAllWithSpec(spec);
+            return orders;
         }
     }
 }

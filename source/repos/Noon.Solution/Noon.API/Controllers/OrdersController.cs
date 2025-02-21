@@ -35,7 +35,18 @@ namespace Noon.API.Controllers
             var order = await _orderService.CreateOrderAsync(buyerEmail, orderDto.BasketId, mappedShippingAddress, orderDto.DeliveryMethodId);
             if (order is null) return BadRequest(new ApiResponse(400));
             return Ok(_mapper.Map<Order,OrderToReturnDto>(order));
-
         }
+
+
+
+        [HttpGet]
+        public async Task<ActionResult<IReadOnlyList<OrderToReturnDto>>> GetOrdersForUser()
+        {
+            var buyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var orders = await _orderService.GetOrdersForUserAsync(buyerEmail);
+            if (orders is null) return NotFound(new ApiResponse(404));
+            return Ok(_mapper.Map<IReadOnlyList<Order>, IReadOnlyList<OrderToReturnDto>>(orders));
+        }
+
     }
 }
