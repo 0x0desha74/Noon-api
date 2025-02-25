@@ -22,6 +22,7 @@ namespace Noon.API.Extensions
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
             services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
+            services.AddScoped(typeof(IPaymentService), typeof(PaymentService));
 
 
             services.Configure<ApiBehaviorOptions>(options =>

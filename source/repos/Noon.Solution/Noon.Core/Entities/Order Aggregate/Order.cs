@@ -7,13 +7,14 @@
 
         }
 
-        public Order(string buyerEmail, ICollection<OrderItem> items, DeliveryMethod deliveryMethod, Address shippingAddress, decimal subTotal)
+        public Order(string buyerEmail, ICollection<OrderItem> items, DeliveryMethod deliveryMethod, Address shippingAddress, decimal subTotal, string paymentIntentId)
         {
             BuyerEmail = buyerEmail;
             Items = items;
             DeliveryMethod = deliveryMethod;
             ShippingAddress = shippingAddress;
             SubTotal = subTotal;
+            PaymentIntentId = paymentIntentId;
         }
 
         public string BuyerEmail { get; set; }
@@ -25,6 +26,6 @@
         public decimal SubTotal { get; set; }
         public decimal GetTotal()
             => SubTotal + DeliveryMethod.Cost;
-        public string PaymentIntentId { get; set; } = string.Empty;
+        public string PaymentIntentId { get; set; }
     }
 }

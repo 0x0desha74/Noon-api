@@ -26,7 +26,7 @@ namespace Noon.API.Controllers
 
 
 
-        [Authorize]
+        
         [HttpGet]
         public async Task<ActionResult<IReadOnlyList<Pagination<ProductToReturnDto>>>> GetProducts([FromQuery] ProductSpecParams specParams)
         {
@@ -52,7 +52,7 @@ namespace Noon.API.Controllers
         {
 
             var spec = new ProductWithBrandAndTypeSpecifications(id);
-            var product = await _unitOfWork.Repository<Product>().GetByIdWithSpec(spec);
+            var product = await _unitOfWork.Repository<Product>().GetEntityWithSpec(spec);
 
 
             if (product is null) return Ok(new ApiResponse(404));

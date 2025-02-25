@@ -16,12 +16,14 @@ namespace Noon.Service
     {
         private readonly IBasketRepository _basketRepo;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPaymentService _paymentService;
 
 
-        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork)
+        public OrderService(IBasketRepository basketRepo, IUnitOfWork unitOfWork, IPaymentService paymentService)
         {
             _basketRepo = basketRepo;
             _unitOfWork = unitOfWork;
+            _paymentService = paymentService;
         }
 
         public async Task<Order?> CreateOrderAsync(string buyerEmail, string basketId, Address shippingAddress, int deliveryMethodId)
@@ -40,7 +42,16 @@ namespace Noon.Service
             }
             var subtotal = items.Sum(product => (product.Price * product.Quantity));
             var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetById(deliveryMethodId);
-            var order = new Order(buyerEmail, items, deliveryMethod, shippingAddress, subtotal);
+
+            var spec = new OrderWithPaymentIntentIdSpecifications(basket.PaymentIntentId);
+            var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
+            if(existingOrder is not null)
+            {
+                 _unitOfWork.Repository<Order>().Delete(existingOrder);
+                await _paymentService.CreateOrUpdatePaymentIntent(basket.Id);
+            }
+
+            var order = new Order(buyerEmail, items, deliveryMethod, shippingAddress, subtotal, basket.PaymentIntentId);
             await _unitOfWork.Repository<Order>().AddAsync(order);
             var result = await _unitOfWork.Complete();
 
@@ -51,7 +62,7 @@ namespace Noon.Service
         public Task<Order> GetOrderByIdForUserAsync(string buyerEmail, int orderId)
         {
             var spec = new OrderSpecifications(buyerEmail, orderId);
-            var order = _unitOfWork.Repository<Order>().GetByIdWithSpec(spec);
+            var order = _unitOfWork.Repository<Order>().GetEntityWithSpec(spec);
             return order is null ? null : order;
         }
 

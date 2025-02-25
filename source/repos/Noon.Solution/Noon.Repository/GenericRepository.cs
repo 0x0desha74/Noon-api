@@ -38,7 +38,7 @@ namespace Noon.Repository
             
         }
 
-        public async Task<T> GetByIdWithSpec(ISpecifications<T> spec)
+        public async Task<T> GetEntityWithSpec(ISpecifications<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }

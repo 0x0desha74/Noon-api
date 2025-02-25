@@ -4,9 +4,7 @@ namespace Noon.Core.Services
 {
     public interface IPaymentService
     {
-        Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId)
-        {
-
-        }
+        Task<CustomerBasket> CreateOrUpdatePaymentIntent(string basketId);
+       
     }
 }

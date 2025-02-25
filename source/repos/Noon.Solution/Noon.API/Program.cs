@@ -51,6 +51,13 @@ namespace Noon.API
             builder.Services.AddApplicationServices();
             builder.Services.AddIdentityServices(builder.Configuration);
             builder.Services.AddSwaggerServices();
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", options =>
+                {
+                    options.AllowAnyHeader().AllowAnyMethod().WithOrigins(builder.Configuration["FrontBaseUrl"]);
+                });
+            });
             var app = builder.Build();
 
 
@@ -92,7 +99,7 @@ namespace Noon.API
 
             app.UseStatusCodePagesWithReExecute("/errors/{0}"); //Handling NotFound EndPoint
             app.UseHttpsRedirection();
-
+            app.UseCors("CorsPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
             #endregion
