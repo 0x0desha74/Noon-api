@@ -52,7 +52,7 @@ namespace Noon.Service
         {
             var spec = new OrderSpecifications(buyerEmail, orderId);
             var order = _unitOfWork.Repository<Order>().GetByIdWithSpec(spec);
-            return order is null? null : order ;
+            return order is null ? null : order;
         }
 
         public Task<IReadOnlyList<Order>> GetOrdersForUserAsync(string buyerEmail)
@@ -63,10 +63,8 @@ namespace Noon.Service
         }
 
         public Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodsAsync()
-        {
+              => _unitOfWork.Repository<DeliveryMethod>().GetAll();
 
-               return _unitOfWork.Repository<DeliveryMethod>().GetAll();
-        }
 
     }
 }

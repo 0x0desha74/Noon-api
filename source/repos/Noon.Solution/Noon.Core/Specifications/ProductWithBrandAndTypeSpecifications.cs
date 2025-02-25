@@ -1,10 +1,4 @@
 ﻿using Noon.Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Noon.Core.Specifications
 {
@@ -29,7 +23,7 @@ namespace Noon.Core.Specifications
 
 
 
-            ApplyPagination((ProductSpecParams.PageIndex -1) * ProductSpecParams.PageSize ,ProductSpecParams.PageSize);
+            ApplyPagination((ProductSpecParams.PageIndex - 1) * ProductSpecParams.PageSize, ProductSpecParams.PageSize);
 
             if (!string.IsNullOrEmpty(ProductSpecParams.Sort))
             {

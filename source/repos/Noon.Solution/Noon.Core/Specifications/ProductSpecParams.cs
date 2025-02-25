@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Noon.Core.Specifications
+﻿namespace Noon.Core.Specifications
 {
     public class ProductSpecParams
     {
         private const int mazPageSize = 10;
         private int pageSize = 5;
-            
+
         public int PageSize
         {
             get { return pageSize; }
