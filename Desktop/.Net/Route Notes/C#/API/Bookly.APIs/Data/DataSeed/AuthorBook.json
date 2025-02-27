@@ -1,0 +1,42 @@
+[
+  {
+    "AuthosrId": 1,
+    "BooksId": 1
+  },
+  {
+    "AuthosrId": 2,
+    "BooksId": 2
+  },
+  {
+    "AuthosrId": 3,
+    "BooksId": 3
+  },
+  {
+    "AuthosrId": 4,
+    "BooksId": 4
+  },
+  {
+    "AuthosrId": 5,
+    "BooksId": 5
+  },
+  {
+    "AuthosrId": 6,
+    "BooksId": 6
+  },
+  {
+    "AuthosrId": 7,
+    "BooksId": 7
+  },
+  {
+    "AuthosrId": 8,
+    "BooksId": 8
+  },
+  {
+    "AuthosrId": 9,
+    "BooksId": 9
+  },
+  {
+    "AuthosrId": 10,
+    "BooksId": 10
+  }
+]

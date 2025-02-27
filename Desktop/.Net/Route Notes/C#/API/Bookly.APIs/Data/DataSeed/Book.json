@@ -1,0 +1,112 @@
+[
+  {
+    "Title"        :      "The Great Gatsby",
+    "AuthorId"        : 1,
+    "ISBN"          :         "9780743273565",
+    "PublishedDate"    : "1925-04-10",
+    "Genre"            :         "Fiction",
+    "TotalCopies"      : 10,
+    "AvailableCopies"  : 5,
+    "PictureUrl"      : "images/books/great-gatsby.jpg",
+    "Description"      : "A classic novel about the American Dream and the Roaring Twenties."
+  },
+  {
+    "Title": "1984",
+    "AuthorId": 2,
+    "ISBN": "9780451524935",
+    "PublishedDate": "1949-06-08",
+    "Genre": "Dystopian",
+    "TotalCopies": 15,
+    "AvailableCopies": 10,
+    "PictureUrl": "images/books/1984.jpg",
+    "Description": "A dystopian novel set in a totalitarian society ruled by Big Brother."
+  },
+  {
+    "Title": "Harry Potter and the Philosopher's Stone",
+    "AuthorId": 3,
+    "ISBN": "9780747532743",
+    "PublishedDate": "1997-06-26",
+    "Genre": "Fantasy",
+    "TotalCopies": 20,
+    "AvailableCopies": 15,
+    "PictureUrl": "images/books/harry-potter.jpg",
+    "Description": "The first book in the Harry Potter series, introducing the magical world of Hogwarts."
+  },
+  {
+    "Title": "Pride and Prejudice",
+    "AuthorId": 4,
+    "ISBN": "9780141439518",
+    "PublishedDate": "1813-01-28",
+    "Genre": "Romance",
+    "TotalCopies": 12,
+    "AvailableCopies": 8,
+    "PictureUrl": "images/books/pride-prejudice.jpg",
+    "Description": "A romantic novel set in early 19th-century England."
+  },
+  {
+    "Title": "The Adventures of Huckleberry Finn",
+    "AuthorId": 5,
+    "ISBN": "9780486280615",
+    "PublishedDate": "1884-12-10",
+    "Genre": "Adventure",
+    "TotalCopies": 18,
+    "AvailableCopies": 12,
+    "PictureUrl": "images/books/huckleberry-finn.jpg",
+    "Description": "A story of adventure and friendship along the Mississippi River."
+  },
+  {
+    "Title": "War and Peace",
+    "AuthorId": 6,
+    "ISBN": "9781400079988",
+    "PublishedDate": "1869-01-01",
+    "Genre": "Historical Fiction",
+    "TotalCopies": 25,
+    "AvailableCopies": 20,
+    "PictureUrl": "images/books/war-and-peace.jpg",
+    "Description": "A historical novel set during the Napoleonic Wars."
+  },
+  {
+    "Title": "To the Lighthouse",
+    "AuthorId": 7,
+    "ISBN": "9780156907392",
+    "PublishedDate": "1927-05-05",
+    "Genre": "Modernist",
+    "TotalCopies": 10,
+    "AvailableCopies": 7,
+    "PictureUrl": "images/books/to-the-lighthouse.jpg",
+    "Description": "A modernist novel exploring themes of time and memory."
+  },
+  {
+    "Title": "The Old Man and the Sea",
+    "AuthorId": 8,
+    "ISBN": "9780684801223",
+    "PublishedDate": "1952-09-01",
+    "Genre": "Literary Fiction",
+    "TotalCopies": 15,
+    "AvailableCopies": 10,
+    "PictureUrl": "images/books/old-man-and-the-sea.jpg",
+    "Description": "A story of an old fisherman's struggle with a giant marlin."
+  },
+  {
+    "Title": "One Hundred Years of Solitude",
+    "AuthorId": 9,
+    "ISBN": "9780060883287",
+    "PublishedDate": "1967-05-30",
+    "Genre": "Magical Realism",
+    "TotalCopies": 20,
+    "AvailableCopies": 18,
+    "PictureUrl": "images/books/one-hundred-years.jpg",
+    "Description": "A multi-generational story of the Buendía family."
+  },
+  {
+    "Title": "Norwegian Wood",
+    "AuthorId": 10,
+    "ISBN": "9780375704024",
+    "PublishedDate": "1987-09-04",
+    "Genre": "Literary Fiction",
+    "TotalCopies": 15,
+    "AvailableCopies": 12,
+    "PictureUrl": "images/books/norwegian-wood.jpg",
+    "Description": "A nostalgic story of love and loss in 1960s Japan."
+  }
+]
